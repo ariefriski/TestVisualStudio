@@ -1,4 +1,5 @@
 using MenKosAPI.Context;
+using MenKosAPI.Repositories.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,9 @@ var connectionString = builder.Configuration.GetConnectionString("MyConnectionSt
 builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
 
 
+builder.Services.AddScoped<RoomPriceRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoomPictureRepository>();
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
