@@ -9,7 +9,7 @@
         public string Contact { get; set; }
         public string City{ get; set; }
         public string Religion{ get; set; }
-        public DateOnly BirthDate { get; set; }
+        public string BirthDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
     }

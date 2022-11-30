@@ -3,8 +3,9 @@
     public class Order
     {
         public int Id { get; set; }
-        public DateOnly EntryDate { get; set; }
-        public DateOnly OutDate { get; set; }
-        public Occupant OccupantId { get; set; }
+        public string EntryDate { get; set; }
+        public string OutDate { get; set; }
+        public int OccupantId { get; set; }
+        public Occupant occupant { get; set; }
     }
 }
