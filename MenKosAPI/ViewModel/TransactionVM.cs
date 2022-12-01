@@ -1,18 +1,14 @@
-﻿
+﻿using MenKosAPI.Models;
 
-using System.Text.Json.Serialization;
-
-namespace MenKosAPI.Models
+namespace MenKosAPI.ViewModel
 {
-    public class Payment
+    public class TransactionVM
     {
         public int Id { get; set; }
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
 
-        public int OrderId { get; set; }
-        [JsonIgnore]
-        public Order? Order { get; set; }
+        public OrderVM? Order { get; set; }
         public bool Status { get; set; }
         public string ProofPayment { get; set; }
     }

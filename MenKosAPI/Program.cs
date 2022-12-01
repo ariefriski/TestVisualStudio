@@ -26,6 +26,8 @@ builder.Services.AddScoped<RoomFacilityRepository>();
 builder.Services.AddScoped<OccupantRepository>();
 builder.Services.AddScoped<RoomRepository>();
 
+builder.Services.AddScoped<TransactionRepository>();
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

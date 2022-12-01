@@ -3,7 +3,40 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Transaksi Pembayaran</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Scripts{
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js" defer></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/dataTables.buttons.min.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.colVis.min.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js" defer></script>
+    <script src="~/js/transaksi.js" defer></script>
+
+
+}
+
+    <div class="text-center">
+        <h1 class="display-4">Transaksi Pembayaran</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+
+        <table id="paymentTable" class="display table">
+            <thead class="table-dark text-light">
+                <tr>
+                    <th>Amount</th>
+                    <th>Payment Date</th>
+                    <th>Status</th>
+                    <th>Proof Payment</th>
+                    <th>Entry Date</th>
+                    <th>Out Date</th>
+
+                </tr>
+            </thead>
+            <tbody class="table-striped">
+            </tbody>
+
+        </table>
+
+    </div>
