@@ -17,6 +17,15 @@ builder.Services.AddScoped<RoomPriceRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoomPictureRepository>();
 
+builder.Services.AddScoped<PaymentRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<RoleRepository>();
+
+
+builder.Services.AddScoped<RoomFacilityRepository>();
+builder.Services.AddScoped<OccupantRepository>();
+builder.Services.AddScoped<RoomRepository>();
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenKosAPI.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20221130111530_init")]
+    [Migration("20221201020151_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -33,9 +33,8 @@ namespace MenKosAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BirthDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -80,16 +79,14 @@ namespace MenKosAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EntryDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("OccupantId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OutDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("OutDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

@@ -23,7 +23,7 @@ namespace MenKosAPI.Migrations
                     Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Religion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -79,8 +79,8 @@ namespace MenKosAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OutDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OutDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OccupantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
