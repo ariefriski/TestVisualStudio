@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenKosAPI.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20221201064442_init")]
-    partial class init
+    [Migration("20221201083353_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
