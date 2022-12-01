@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
+
 
 namespace MenKosAPI.Models
 {
@@ -16,6 +16,6 @@ namespace MenKosAPI.Models
         public int RoomId {get; set;}
 
         [JsonIgnore]
-        public Room Room{ get; set; }
+        public Room? Room{ get; set; }
     }
 }

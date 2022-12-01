@@ -15,5 +15,11 @@ namespace MenKosAPI.Controllers
         {
             this.roomRepository = roomRepository;
         }
+
+
+        //Create RoomPrice.
+        //Create Room.
+        //Create Picture Room.
+        //Create Facility Room
     }
 }

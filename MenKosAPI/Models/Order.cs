@@ -1,4 +1,8 @@
-﻿namespace MenKosAPI.Models
+﻿
+
+using System.Text.Json.Serialization;
+
+namespace MenKosAPI.Models
 {
     public class Order
     {
@@ -6,6 +10,7 @@
         public DateTime EntryDate { get; set; }
         public DateTime OutDate { get; set; }
         public int OccupantId { get; set; }
-        public Occupant occupant { get; set; }
+        [JsonIgnore]
+        public Occupant? occupant { get; set; }
     }
 }

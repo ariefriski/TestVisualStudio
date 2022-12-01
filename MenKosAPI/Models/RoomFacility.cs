@@ -1,4 +1,8 @@
-﻿namespace MenKosAPI.Models
+﻿
+
+using System.Text.Json.Serialization;
+
+namespace MenKosAPI.Models
 {
     public class RoomFacility
     {
@@ -6,7 +10,8 @@
         public string Name { get; set; }
 
         public int RoomId { get; set; }
-        public Room room { get; set; }
+        [JsonIgnore]
+        public Room? room { get; set; }
         public string Description { get; set; }
 
     }

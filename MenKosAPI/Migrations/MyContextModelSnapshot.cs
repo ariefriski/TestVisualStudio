@@ -155,7 +155,7 @@ namespace MenKosAPI.Migrations
                     b.Property<int>("Floor")
                         .HasColumnType("int");
 
-                    b.Property<int>("PaymentId")
+                    b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoomPriceId")
@@ -207,14 +207,12 @@ namespace MenKosAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("RoomType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("RoomPictures");
                 });
@@ -296,9 +294,7 @@ namespace MenKosAPI.Migrations
                 {
                     b.HasOne("MenKosAPI.Models.Payment", "payment")
                         .WithMany()
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PaymentId");
 
                     b.HasOne("MenKosAPI.Models.RoomPrice", "roomPrice")
                         .WithMany()
@@ -312,6 +308,17 @@ namespace MenKosAPI.Migrations
                 });
 
             modelBuilder.Entity("MenKosAPI.Models.RoomFacility", b =>
+                {
+                    b.HasOne("MenKosAPI.Models.Room", "room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("room");
+                });
+
+            modelBuilder.Entity("MenKosAPI.Models.RoomPicture", b =>
                 {
                     b.HasOne("MenKosAPI.Models.Room", "room")
                         .WithMany()
