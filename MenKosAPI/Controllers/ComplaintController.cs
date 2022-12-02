@@ -8,7 +8,7 @@ namespace MenKosAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComplaintController : BaseController<ComplaintRepository, ComplaintTicket>
+    public class ComplaintController : BaseController<ComplaintRepository, Complaint>
     {
         private ComplaintRepository complaintRepository;
         public ComplaintController(ComplaintRepository complaintRepository) : base(complaintRepository)

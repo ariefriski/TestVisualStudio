@@ -14,6 +14,7 @@ builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connect
 
 
 builder.Services.AddScoped<RoomPriceRepository>();
+builder.Services.AddScoped<ComplaintRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoomPictureRepository>();
 
@@ -25,7 +26,7 @@ builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<RoomFacilityRepository>();
 builder.Services.AddScoped<OccupantRepository>();
 builder.Services.AddScoped<RoomRepository>();
-builder.Services.AddScoped<ManageRoomRepository>();
+//builder.Services.AddScoped<ManageRoomRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
