@@ -38,7 +38,7 @@ namespace MenKosAPI.Base
                     {
                         Status = 200,
                         Message = "Success Get Data",
-                        data = data
+                        Data = data
                     });
                 }
             }
@@ -53,7 +53,7 @@ namespace MenKosAPI.Base
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int id)    
         {
             var data = repository.Get(id);
             try

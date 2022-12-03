@@ -1,6 +1,7 @@
 ﻿using MenKosAPI.Base;
 using MenKosAPI.Models;
 using MenKosAPI.Repositories.Data;
+using MenKosAPI.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +12,57 @@ namespace MenKosAPI.Controllers
     public class TransactionController : ControllerBase
     {
         private TransactionRepository _transactionRepository;
-        public TransactionController(TransactionRepository transactionRepository) 
+        private OccupantRepository _occupantRepository;
+        public TransactionController(TransactionRepository transactionRepository, OccupantRepository occupantRepository)
         {
-         _transactionRepository = transactionRepository;
+            _occupantRepository = occupantRepository;
+            _transactionRepository = transactionRepository;
         }
 
-        [HttpGet("Transaction")]
+        [HttpGet]
         public IActionResult GetTransaction()
         {
             var listData = _transactionRepository.Get();
 
             return Ok(new
             {
-                message = "berhasil",
-                statusCode = 200,
-                data = listData
+                Message = "berhasil",
+                StatusCode = 200,
+                Data = listData
             });
+        }
+
+
+        [HttpPost("NewTransaction")]
+        public IActionResult CreateTransaction(NewTransactionVM newTransaction)
+        {
+            var result = _transactionRepository.CreateNewTransaction(newTransaction);
+
+            return result switch
+            {
+                1 => Ok(new
+                {
+                    Message = "Buat Transaksi Baru Berhasil!",
+                    StatusCode = 200,
+                }),
+                _ => BadRequest(new
+                {
+                    Message = "Buat Transaksi Gagal!",
+                    StatusCode = 400
+                })
+            };
+
+            
+
+
+
+
+
+            //NewTransactionVM newTransactionVM = new() { Occupant = new() { BirthDate = DateTime.Now } };
+
+
+            //Console.WriteLine();
+
         }
     }
 }
