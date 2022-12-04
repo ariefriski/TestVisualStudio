@@ -24,11 +24,11 @@ namespace MenKosAPI.Repositories.Data
             _roomRepository = roomRepository;
         }
 
-        public List<TransactionVM> Get()
+        public List<PaymentOrderOccupantVM> Get()
         {
             var Payments = _context.Payments.Include(p => p.Order).ThenInclude(order => order.Occupant).ToList();
 
-            List<TransactionVM> transactions = new List<TransactionVM>();
+            List<PaymentOrderOccupantVM> transactions = new List<PaymentOrderOccupantVM>();
             //Console.WriteLine(transactions[0]);
 
             
@@ -37,14 +37,15 @@ namespace MenKosAPI.Repositories.Data
             {
 
                 
-                TransactionVM transaction = new() {
+                PaymentOrderOccupantVM transaction = new() {
                     Amount = payment.Amount,
                     PaymentDate = payment.PaymentDate,
-                    Id = payment.Id,
+                    PaymentId = payment.Id,
                     Order = new(){
                         Id = payment.Order.Id,
                         EntryDate = payment.Order.EntryDate,
                         OutDate = payment.Order.OutDate,
+                        OccupantId = null,
                         Occupant = new(){
                             Id = payment.Order.Occupant.Id,
                             BirthDate = payment.Order.Occupant.BirthDate,

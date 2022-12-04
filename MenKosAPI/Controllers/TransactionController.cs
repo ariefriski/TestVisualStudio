@@ -26,7 +26,7 @@ namespace MenKosAPI.Controllers
 
             return Ok(new
             {
-                Message = "berhasil",
+                Message = "Success Get Data",
                 StatusCode = 200,
                 Data = listData
             });
