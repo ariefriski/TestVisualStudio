@@ -52,17 +52,25 @@ namespace MenKosAPI.Controllers
                 })
             };
 
-            
 
-
-
-
-
-            //NewTransactionVM newTransactionVM = new() { Occupant = new() { BirthDate = DateTime.Now } };
-
-
-            //Console.WriteLine();
 
         }
+
+
+
+        [HttpGet("admin/bill")]
+        public IActionResult GetBill()
+        {
+            var listBill = _transactionRepository.GetBill();
+
+            return Ok(new
+            {
+                data = listBill
+            });
+        }
+
+
+
+
     }
 }

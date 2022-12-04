@@ -9,8 +9,9 @@ namespace MenKosAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int RoomId { get; set; }
-        [JsonIgnore]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RoomId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Room? room { get; set; }
         public string Description { get; set; }
 

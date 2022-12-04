@@ -7,10 +7,11 @@ namespace MenKosAPI.Models
     public class RoomPicture
     {
         public int Id { get; set; }
-        
-        public int RoomId { get; set; }
 
-        [JsonIgnore]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RoomId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Room? room { get; set; }
     }
 }

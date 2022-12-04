@@ -8,12 +8,14 @@ namespace MenKosAPI.Models
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public int OccupantId { get; set; }
-
-        public int RoleId { get; set; }
-        [JsonIgnore]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? OccupantId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Occupant? occupant { get; set; }
-        [JsonIgnore]
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RoleId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Role? role { get; set; }
 
     }

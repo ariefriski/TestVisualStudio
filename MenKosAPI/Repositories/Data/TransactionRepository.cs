@@ -127,21 +127,93 @@ namespace MenKosAPI.Repositories.Data
             var room = _context.Rooms.SingleOrDefault(r => r.Id == newTransaction.RoomId);
 
             room.Status = true;
+            room.PaymentId = newPaymentId;
 
             var result = _roomRepository.Update(room);
 
             if(result > 0)
             {
-                return 1;
+                return 1; // return Ok
             }
 
-            return 2;
+            return 2; // return BadRequest
 
 
 
 
 
         }
+
+        public IEnumerable<RoomPaymentOrderOccupantVM> GetBill()
+        {
+         
+
+
+            var listRoom = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).ThenInclude(o => o.Occupant).AsEnumerable().Where(r =>
+            {
+                try
+                {
+                int? intervalDayofOutToCurrent = (r.Payment.Order.OutDate - DateTime.Now).Days;
+                return (intervalDayofOutToCurrent <= 5 || intervalDayofOutToCurrent >= 10) && r.Status == true; 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+
+            });
+
+
+            List<RoomPaymentOrderOccupantVM> roomPaymentOrderOccupantVMs = new List<RoomPaymentOrderOccupantVM>();
+
+            foreach(var room in listRoom)
+            {
+                RoomPaymentOrderOccupantVM roomPaymentOrderOccupant = new()
+                {
+                    RoomId = room.Id,
+                    Description = room.Description,
+                    Floor = room.Floor,
+                    Status = room.Status,
+                    RoomPrice =null,
+                    Payment = new(){
+                        Id = room.Payment.Id,
+                        Amount = room.Payment.Amount,
+                        PaymentDate = room.Payment.PaymentDate,
+                        ProofPayment = room.Payment.ProofPayment,
+                        Status = room.Payment.Status,
+                        OrderId = null,
+                        Order = new(){
+                            Id = room.Payment.Order.Id,
+                            EntryDate = room.Payment.Order.EntryDate,
+                            OutDate = room.Payment.Order.OutDate,
+                            OccupantId = null,
+                            Occupant = new(){
+                                Id = room.Payment.Order.Occupant.Id,
+                                Name = room.Payment.Order.Occupant.Name,
+                                NIK = room.Payment.Order.Occupant.NIK,
+                                BirthDate = room.Payment.Order.Occupant.BirthDate,
+                                City = room.Payment.Order.Occupant.City,
+                                Contact = room.Payment.Order.Occupant.Contact,
+                                Gender = room.Payment.Order.Occupant.Gender,
+                                Religion = room.Payment.Order.Occupant.Religion,
+                                CreatedAt = room.Payment.Order.Occupant.CreatedAt,
+                                UpdateAt = room.Payment.Order.Occupant.UpdateAt 
+                            }
+                        }
+                    }
+                };
+
+                roomPaymentOrderOccupantVMs.Add(roomPaymentOrderOccupant);
+            }
+
+
+
+            return roomPaymentOrderOccupantVMs;
+
+            //return listRoom;
+        }
+
     }
 
    

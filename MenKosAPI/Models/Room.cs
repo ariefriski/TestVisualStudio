@@ -9,18 +9,18 @@ namespace MenKosAPI.Models
         public int Id { get; set; }
         public int Floor { get; set; }
 
-        public int RoomPriceId { get; set; }
-
-        
-        public int? PaymentId { get; set; }
-        [JsonIgnore]
-        public RoomPrice? roomPrice{ get; set; }
-        [JsonIgnore]
-        public Payment? payment { get; set; }
         
 
         public bool Status { get; set; }
 
         public string Description { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RoomPriceId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public RoomPrice? RoomPrice{ get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? PaymentId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Payment? Payment { get; set; }
     }
 }

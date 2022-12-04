@@ -9,8 +9,9 @@ namespace MenKosAPI.Models
         public int Id { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime OutDate { get; set; }
-        public int OccupantId { get; set; }
-        [JsonIgnore]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? OccupantId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Occupant? Occupant { get; set; }
     }
 }

@@ -13,9 +13,10 @@ namespace MenKosAPI.Models
         public string Problem { get; set; }
         public string? Reply { get; set; }
         public bool Status { get; set; }
-        public int RoomId {get; set;}
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RoomId {get; set;}
 
-        [JsonIgnore]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Room? Room{ get; set; }
     }
 }
