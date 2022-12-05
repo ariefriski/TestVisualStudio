@@ -68,11 +68,11 @@ $(document).ready(function () {
                 }
             },
             {
-                data: 'Id',
+                data: 'PaymentId',
                 render: (data,type,row,meat) => {
                     console.log(data);
                     console.log(row);
-                   return row.Status ? `<button type="button" class="btn btn-danger mr-5 mb-5"><i class="fa fa-times mr-5"></i>Delete</button>` : `<button type="button" class="btn btn-primary mr-5 mb-5" data-form-id="${data}"><i class="fa fa-thumbs-up mr-5"></i>Valid</button>`
+                    return row.Status ? `<button type="button" class="btn btn-primary mr-5 mb-5" data-form-id="${data}" disabled><i class="fa fa-thumbs-up mr-5"></i>Valid</button>` : `<button type="button" class="btn btn-primary mr-5 mb-5" data-form-id="${data}"  onclick="approvePayment(${data})"><i class="fa fa-thumbs-up mr-5"></i>Valid</button>`
                    
                 }
             }
@@ -266,4 +266,15 @@ function sendNewTransaction() {
 }
 
 
-
+//admin validasi payment yang status masih on hold
+function approvePayment(paymentId) {
+    $.ajax({
+        url: `https://localhost:7095/api/Payment/${paymentId}`,
+        type: 'PATCH',
+        contentType: 'application/json',
+        success: function (res) {
+            console.log(res)
+            window.location.reload()
+        }
+    })
+}

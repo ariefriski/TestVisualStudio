@@ -4,7 +4,15 @@ namespace MenKosClient.Controllers
 {
     public class PanjiController : Controller
     {
-        public IActionResult Transaksi()
+  
+
+        public IActionResult Transaction()
+        {
+            return View();
+        }
+
+     
+        public IActionResult PaymentDeadline()
         {
             return View();
         }

@@ -28,15 +28,13 @@ namespace MenKosAPI.Repositories.Data
         {
             var Payments = _context.Payments.Include(p => p.Order).ThenInclude(order => order.Occupant).ToList();
 
+            
+
             List<PaymentOrderOccupantVM> transactions = new List<PaymentOrderOccupantVM>();
             //Console.WriteLine(transactions[0]);
 
-            
-
             foreach (var payment in Payments)
             {
-
-                
                 PaymentOrderOccupantVM transaction = new() {
                     Amount = payment.Amount,
                     PaymentDate = payment.PaymentDate,
@@ -147,15 +145,14 @@ namespace MenKosAPI.Repositories.Data
 
         public IEnumerable<RoomPaymentOrderOccupantVM> GetBill()
         {
-         
 
-
-            var listRoom = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).ThenInclude(o => o.Occupant).AsEnumerable().Where(r =>
+            var listRoom = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).ThenInclude(o => o.Occupant).Include(r => r.RoomPrice).AsEnumerable().Where(r =>
             {
                 try
                 {
-                int? intervalDayofOutToCurrent = (r.Payment.Order.OutDate - DateTime.Now).Days;
-                return (intervalDayofOutToCurrent <= 5 || intervalDayofOutToCurrent >= 10) && r.Status == true; 
+                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                    int? intervalDayofOutToCurrent = (r.Payment.Order.OutDate - currentDate).Days;
+                    return (intervalDayofOutToCurrent <= 0 && intervalDayofOutToCurrent >= -7) && r.Status == true;   //tampil data jika outdate h-7 sampai hari h
                 }
                 catch (Exception ex)
                 {
@@ -176,7 +173,7 @@ namespace MenKosAPI.Repositories.Data
                     Description = room.Description,
                     Floor = room.Floor,
                     Status = room.Status,
-                    RoomPrice =null,
+                    RoomPrice = room.RoomPrice,
                     Payment = new(){
                         Id = room.Payment.Id,
                         Amount = room.Payment.Amount,

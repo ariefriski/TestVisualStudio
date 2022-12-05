@@ -58,7 +58,7 @@ namespace MenKosAPI.Controllers
 
 
 
-        [HttpGet("Admin/PaymentDeadline")]
+        [HttpGet("PaymentDeadline")]
         public IActionResult GetBill()
         {
             var listBill = _transactionRepository.GetBill();
