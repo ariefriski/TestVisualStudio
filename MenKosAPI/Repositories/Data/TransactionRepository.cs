@@ -3,6 +3,7 @@ using MenKosAPI.Handler;
 using MenKosAPI.Models;
 using MenKosAPI.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace MenKosAPI.Repositories.Data
 {
@@ -28,23 +29,26 @@ namespace MenKosAPI.Repositories.Data
         {
             var Payments = _context.Payments.Include(p => p.Order).ThenInclude(order => order.Occupant).ToList();
 
-            
+
 
             List<PaymentOrderOccupantVM> transactions = new List<PaymentOrderOccupantVM>();
             //Console.WriteLine(transactions[0]);
 
             foreach (var payment in Payments)
             {
-                PaymentOrderOccupantVM transaction = new() {
+                PaymentOrderOccupantVM transaction = new()
+                {
                     Amount = payment.Amount,
                     PaymentDate = payment.PaymentDate,
                     PaymentId = payment.Id,
-                    Order = new(){
+                    Order = new()
+                    {
                         Id = payment.Order.Id,
                         EntryDate = payment.Order.EntryDate,
                         OutDate = payment.Order.OutDate,
                         OccupantId = null,
-                        Occupant = new(){
+                        Occupant = new()
+                        {
                             Id = payment.Order.Occupant.Id,
                             BirthDate = payment.Order.Occupant.BirthDate,
                             City = payment.Order.Occupant.City,
@@ -130,7 +134,7 @@ namespace MenKosAPI.Repositories.Data
 
             var result = _roomRepository.Update(room);
 
-            if(result > 0)
+            if (result > 0)
             {
                 return 1; // return Ok
             }
@@ -151,8 +155,13 @@ namespace MenKosAPI.Repositories.Data
                 try
                 {
                     var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                    int? intervalDayofOutToCurrent = (r.Payment.Order.OutDate - currentDate).Days;
-                    return (intervalDayofOutToCurrent <= 0 && intervalDayofOutToCurrent >= -7) && r.Status == true;   //tampil data jika outdate h-7 sampai hari h
+                    var outDate = new DateTime(r.Payment.Order.OutDate.Year, r.Payment.Order.OutDate.Month, r.Payment.Order.OutDate.Day);
+
+                    //Console.WriteLine($"detail hari ini {currentDate}");
+                    //Console.WriteLine($"detail Outdate {outDate}");
+
+                    int? intervalDayofOutToCurrent = (outDate - currentDate).Days;
+                    return (intervalDayofOutToCurrent >= 0 && intervalDayofOutToCurrent <= 7) && r.Status == true;   //h-7 sampai hari h
                 }
                 catch (Exception ex)
                 {
@@ -165,7 +174,7 @@ namespace MenKosAPI.Repositories.Data
 
             List<RoomPaymentOrderOccupantVM> roomPaymentOrderOccupantVMs = new List<RoomPaymentOrderOccupantVM>();
 
-            foreach(var room in listRoom)
+            foreach (var room in listRoom)
             {
                 RoomPaymentOrderOccupantVM roomPaymentOrderOccupant = new()
                 {
@@ -174,19 +183,22 @@ namespace MenKosAPI.Repositories.Data
                     Floor = room.Floor,
                     Status = room.Status,
                     RoomPrice = room.RoomPrice,
-                    Payment = new(){
+                    Payment = new()
+                    {
                         Id = room.Payment.Id,
                         Amount = room.Payment.Amount,
                         PaymentDate = room.Payment.PaymentDate,
                         ProofPayment = room.Payment.ProofPayment,
                         Status = room.Payment.Status,
                         OrderId = null,
-                        Order = new(){
+                        Order = new()
+                        {
                             Id = room.Payment.Order.Id,
                             EntryDate = room.Payment.Order.EntryDate,
                             OutDate = room.Payment.Order.OutDate,
                             OccupantId = null,
-                            Occupant = new(){
+                            Occupant = new()
+                            {
                                 Id = room.Payment.Order.Occupant.Id,
                                 Name = room.Payment.Order.Occupant.Name,
                                 NIK = room.Payment.Order.Occupant.NIK,
@@ -196,7 +208,7 @@ namespace MenKosAPI.Repositories.Data
                                 Gender = room.Payment.Order.Occupant.Gender,
                                 Religion = room.Payment.Order.Occupant.Religion,
                                 CreatedAt = room.Payment.Order.Occupant.CreatedAt,
-                                UpdateAt = room.Payment.Order.Occupant.UpdateAt 
+                                UpdateAt = room.Payment.Order.Occupant.UpdateAt
                             }
                         }
                     }
@@ -212,7 +224,72 @@ namespace MenKosAPI.Repositories.Data
             //return listRoom;
         }
 
+
+
+        public RoomPaymentOrderOccupantVM GetBill(int occupantId)
+        {
+            try
+            {
+
+     
+                var room = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).Where(r => r.Payment.Order.OccupantId == occupantId).AsEnumerable().FirstOrDefault(r =>
+                    {
+                        try
+                        {
+                            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                            var outDate = new DateTime(r.Payment.Order.OutDate.Year, r.Payment.Order.OutDate.Month, r.Payment.Order.OutDate.Day);
+                            int? intervalDayofOutToCurrent = (outDate - currentDate).Days;
+                            return (intervalDayofOutToCurrent >= 0 && intervalDayofOutToCurrent <= 7);
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            return false;
+                        }
+                    }
+
+                );
+
+
+
+                RoomPaymentOrderOccupantVM roomPaymentOrderOccupant = new()
+                {
+                    RoomId = room.Id,
+                    Description = room.Description,
+                    Floor = room.Floor,
+                    Status = room.Status,
+                    RoomPrice = null,
+                    Payment = new()
+                    {
+                        Id = room.Payment.Id,
+                        Amount = room.Payment.Amount,
+                        PaymentDate = room.Payment.PaymentDate,
+                        ProofPayment = room.Payment.ProofPayment,
+                        Status = room.Payment.Status,
+                        OrderId = null,
+                        Order = new()
+                        {
+                            Id = room.Payment.Order.Id,
+                            EntryDate = room.Payment.Order.EntryDate,
+                            OutDate = room.Payment.Order.OutDate,
+                            OccupantId = null,
+                            Occupant = null
+                        }
+                    }
+                };
+
+                return roomPaymentOrderOccupant;
+
+            }
+            catch 
+            {
+                return null;
+            }
+
+        }
+
     }
 
-   
+
 }

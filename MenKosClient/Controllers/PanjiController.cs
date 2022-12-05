@@ -16,5 +16,12 @@ namespace MenKosClient.Controllers
         {
             return View();
         }
+
+
+        public IActionResult PaymentDeadline(int occupantId)
+        {
+            return View("");
+        }
+
     }
 }

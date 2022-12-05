@@ -12,10 +12,10 @@ namespace MenKosAPI.Controllers
     public class TransactionController : ControllerBase
     {
         private TransactionRepository _transactionRepository;
-        private OccupantRepository _occupantRepository;
-        public TransactionController(TransactionRepository transactionRepository, OccupantRepository occupantRepository)
+
+        public TransactionController(TransactionRepository transactionRepository)
         {
-            _occupantRepository = occupantRepository;
+
             _transactionRepository = transactionRepository;
         }
 
@@ -65,11 +65,35 @@ namespace MenKosAPI.Controllers
 
             return Ok(new
             {
-                Message = "Success Get Data",
+                Message = "Get Data Successfuly",
                 Status = 200,
                 Data = listBill
             });
         }
+
+        [HttpGet("PaymentDeadline/{occupantId}")]
+        public IActionResult GetBill(int occupantId)
+        {
+            var bill = _transactionRepository.GetBill(occupantId);
+
+            if (bill != null)
+            {
+
+                return Ok(new
+                {
+                    Message = "Get Data Successfuly",
+                    Status = 200,
+                    Data = bill
+                });
+            }
+
+            return BadRequest(new
+            {
+                Message = "Data not found!",
+                Status = 400
+            });
+        }
+
 
 
 
