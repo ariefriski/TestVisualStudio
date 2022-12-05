@@ -18,9 +18,10 @@ namespace MenKosClient.Controllers
         }
 
 
-        public IActionResult PaymentDeadline(int occupantId)
+        [Route("[controller]/paymentdeadline/{id}")]
+        public IActionResult PaymentDeadline(int id)
         {
-            return View("");
+            return View("PaymentDeadlineOccupant", id);
         }
 
     }

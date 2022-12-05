@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Transaksi Pembayaran";
+﻿@model int
+
+@{
+
+    ViewData["Title"] = "Pembayaran Kos";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -7,9 +10,10 @@
     <script src="~/lib/assets/js/plugins/datatables/jquery.dataTables.min.js" defer></script>
     <script src="~/lib/assets/js/plugins/datatables/dataTables.bootstrap4.min.js" defer></script>
 
-    <script src="~/js/paymentDeadline.js" defer></script>
+    <script src="~/js/paymentDeadlineOccupant.js" defer></script>
 
 }
+
 
 
     <div class="content">
@@ -39,25 +43,13 @@
                 </button>
 
                 <div class="text-center">
-                    <h1 class="display-4"></h1>
+                    <h1 class="display-4">@Model.ToString()</h1>
                     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
                     <div class="row justify-content-center">
                         <div class="col-11">
 
-                            <table id="deadlineTable" class="table table-bordered table-striped table-vcenter js-dataTable-full">
-                                <thead class="table-dark text-light">
-                                    <tr>
-                                        <th>Kamar</th>
-                                        <th>Nama Penghuni</th>
-                                        <th>No Hp</th>
-                                        <th>Tanggal Keluar</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-striped">
-                                </tbody>
 
-                            </table>
                         </div>
                     </div>
 

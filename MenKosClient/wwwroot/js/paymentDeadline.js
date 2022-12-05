@@ -1,12 +1,4 @@
-﻿$.ajax({
-    url: 'https://localhost:7095/api/transaction/paymentdeadline',
-    type: 'GET',
-    success: res => console.log(res)
-})
-
-
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $('#deadlineTable').DataTable({
         ajax: {
             url: 'https://localhost:7095/api/transaction/paymentdeadline',
