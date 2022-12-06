@@ -94,7 +94,19 @@ namespace MenKosAPI.Controllers
             });
         }
 
-
+        [HttpPost("ExtendTransaction")]
+        public IActionResult CreateExtendRequestTransaction(ExtendTransactionVM extendTransaction)
+        {
+            var result = _transactionRepository.CreateExtendTransaction(extendTransaction);
+            return result switch
+            {
+                1 => Ok(new
+                {
+                    Message = "Buat Permintaan Perpanjang Kamar Berhasil!",
+                    StatusCode = 200
+                })
+            };
+        }
 
 
 

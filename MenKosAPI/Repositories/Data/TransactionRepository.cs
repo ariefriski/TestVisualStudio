@@ -142,10 +142,6 @@ namespace MenKosAPI.Repositories.Data
 
             return 2; // return BadRequest
 
-
-
-
-
         }
 
         public IEnumerable<RoomPaymentOrderOccupantVM> GetBill()
@@ -157,9 +153,6 @@ namespace MenKosAPI.Repositories.Data
                 {
                     var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                     var outDate = new DateTime(r.Payment.Order.OutDate.Year, r.Payment.Order.OutDate.Month, r.Payment.Order.OutDate.Day);
-
-                    //Console.WriteLine($"detail hari ini {currentDate}");
-                    //Console.WriteLine($"detail Outdate {outDate}");
 
                     int? intervalDayofOutToCurrent = (outDate - currentDate).Days;
                     return (intervalDayofOutToCurrent >= 0 && intervalDayofOutToCurrent <= 7) && r.Status == true;   //h-7 sampai hari h
@@ -214,25 +207,17 @@ namespace MenKosAPI.Repositories.Data
                         }
                     }
                 };
-
                 roomPaymentOrderOccupantVMs.Add(roomPaymentOrderOccupant);
             }
-
-
-
             return roomPaymentOrderOccupantVMs;
 
             //return listRoom;
         }
 
-
-
         public RoomPaymentOrderOccupantVM GetBill(int occupantId)
         {
             try
             {
-
-     
                 var room = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).Include(r => r.RoomPrice).Where(r => r.Payment.Order.OccupantId == occupantId).AsEnumerable().FirstOrDefault(r =>
                     {
                         try
@@ -241,19 +226,13 @@ namespace MenKosAPI.Repositories.Data
                             var outDate = new DateTime(r.Payment.Order.OutDate.Year, r.Payment.Order.OutDate.Month, r.Payment.Order.OutDate.Day);
                             int? intervalDayofOutToCurrent = (outDate - currentDate).Days;
                             return (intervalDayofOutToCurrent >= 0 && intervalDayofOutToCurrent <= 7);
-
-
                         }
                         catch (Exception ex)
                         {
                             return false;
                         }
                     }
-
                 );
-
-
-
                 RoomPaymentOrderOccupantVM roomPaymentOrderOccupant = new()
                 {
                     RoomId = room.Id,
@@ -284,9 +263,7 @@ namespace MenKosAPI.Repositories.Data
                         }
                     }
                 };
-
                 return roomPaymentOrderOccupant;
-
             }
             catch 
             {
@@ -295,6 +272,42 @@ namespace MenKosAPI.Repositories.Data
 
         }
 
+        public int CreateExtendTransaction(ExtendTransactionVM extendTransaction)
+        {
+            Order order = new()
+            {
+                EntryDate = extendTransaction.EntryDate,
+                OutDate = extendTransaction.OutDate,
+                OccupantId = extendTransaction.OccupantId,
+                RoomId = extendTransaction.RoomId,
+            };
+            
+            
+            var orderResult = _orderRepository.Create(order);
+            if(orderResult <= 0)
+            {
+                return 2;
+            }
+
+            Payment payment = new()
+            {
+                Amount = extendTransaction.Amount,
+                OrderId = order.Id,
+                PaymentDate = extendTransaction.PaymentDate,
+                ProofPayment = extendTransaction.ProofPayment,
+                Status = false,
+            };
+
+            _paymentRepository.Create(payment);
+            if(orderResult <= 0)
+            {
+                return 2;
+            }
+
+            return 1;
+
+            
+        }
     }
 
 
