@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenKosAPI.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20221201083353_Init")]
+    [Migration("20221206081659_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -82,15 +82,20 @@ namespace MenKosAPI.Migrations
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OccupantId")
+                    b.Property<int?>("OccupantId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OutDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OccupantId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Orders");
                 });
@@ -106,7 +111,7 @@ namespace MenKosAPI.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -161,7 +166,7 @@ namespace MenKosAPI.Migrations
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomPriceId")
+                    b.Property<int?>("RoomPriceId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -192,7 +197,7 @@ namespace MenKosAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -210,7 +215,7 @@ namespace MenKosAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -252,14 +257,14 @@ namespace MenKosAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OccupantId")
+                    b.Property<int?>("OccupantId")
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -273,50 +278,50 @@ namespace MenKosAPI.Migrations
 
             modelBuilder.Entity("MenKosAPI.Models.Order", b =>
                 {
-                    b.HasOne("MenKosAPI.Models.Occupant", "occupant")
+                    b.HasOne("MenKosAPI.Models.Occupant", "Occupant")
                         .WithMany()
-                        .HasForeignKey("OccupantId")
+                        .HasForeignKey("OccupantId");
+
+                    b.HasOne("MenKosAPI.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("occupant");
+                    b.Navigation("Occupant");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("MenKosAPI.Models.Payment", b =>
                 {
-                    b.HasOne("MenKosAPI.Models.Order", "order")
+                    b.HasOne("MenKosAPI.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
-                    b.Navigation("order");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("MenKosAPI.Models.Room", b =>
                 {
-                    b.HasOne("MenKosAPI.Models.Payment", "payment")
+                    b.HasOne("MenKosAPI.Models.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId");
 
-                    b.HasOne("MenKosAPI.Models.RoomPrice", "roomPrice")
+                    b.HasOne("MenKosAPI.Models.RoomPrice", "RoomPrice")
                         .WithMany()
-                        .HasForeignKey("RoomPriceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomPriceId");
 
-                    b.Navigation("payment");
+                    b.Navigation("Payment");
 
-                    b.Navigation("roomPrice");
+                    b.Navigation("RoomPrice");
                 });
 
             modelBuilder.Entity("MenKosAPI.Models.RoomFacility", b =>
                 {
                     b.HasOne("MenKosAPI.Models.Room", "room")
                         .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomId");
 
                     b.Navigation("room");
                 });
@@ -325,9 +330,7 @@ namespace MenKosAPI.Migrations
                 {
                     b.HasOne("MenKosAPI.Models.Room", "room")
                         .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomId");
 
                     b.Navigation("room");
                 });
@@ -336,15 +339,11 @@ namespace MenKosAPI.Migrations
                 {
                     b.HasOne("MenKosAPI.Models.Occupant", "occupant")
                         .WithMany()
-                        .HasForeignKey("OccupantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OccupantId");
 
                     b.HasOne("MenKosAPI.Models.Role", "role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("occupant");
 

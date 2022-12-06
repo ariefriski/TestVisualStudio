@@ -60,27 +60,6 @@ namespace MenKosAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OutDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OccupantId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Occupants_OccupantId",
-                        column: x => x.OccupantId,
-                        principalTable: "Occupants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -88,8 +67,8 @@ namespace MenKosAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OccupantId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    OccupantId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,14 +77,33 @@ namespace MenKosAPI.Migrations
                         name: "FK_Users_Occupants_OccupantId",
                         column: x => x.OccupantId,
                         principalTable: "Occupants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Users_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OutDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OccupantId = table.Column<int>(type: "int", nullable: true),
+                    RoomId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Occupants_OccupantId",
+                        column: x => x.OccupantId,
+                        principalTable: "Occupants",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -116,9 +114,9 @@ namespace MenKosAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    ProofPayment = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProofPayment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,8 +125,7 @@ namespace MenKosAPI.Migrations
                         name: "FK_Payments_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -138,10 +135,10 @@ namespace MenKosAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Floor = table.Column<int>(type: "int", nullable: false),
-                    RoomPriceId = table.Column<int>(type: "int", nullable: false),
-                    PaymentId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoomPriceId = table.Column<int>(type: "int", nullable: true),
+                    PaymentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -155,8 +152,7 @@ namespace MenKosAPI.Migrations
                         name: "FK_Rooms_RoomPrice_RoomPriceId",
                         column: x => x.RoomPriceId,
                         principalTable: "RoomPrice",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -166,7 +162,7 @@ namespace MenKosAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -176,8 +172,7 @@ namespace MenKosAPI.Migrations
                         name: "FK_RoomFacilities_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -186,7 +181,7 @@ namespace MenKosAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoomId = table.Column<int>(type: "int", nullable: false)
+                    RoomId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -195,14 +190,18 @@ namespace MenKosAPI.Migrations
                         name: "FK_RoomPictures_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OccupantId",
                 table: "Orders",
                 column: "OccupantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_RoomId",
+                table: "Orders",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_OrderId",
@@ -238,11 +237,27 @@ namespace MenKosAPI.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Orders_Rooms_RoomId",
+                table: "Orders",
+                column: "RoomId",
+                principalTable: "Rooms",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Orders_Occupants_OccupantId",
+                table: "Orders");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Orders_Rooms_RoomId",
+                table: "Orders");
+
             migrationBuilder.DropTable(
                 name: "RoomFacilities");
 
@@ -253,10 +268,13 @@ namespace MenKosAPI.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "Role");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Occupants");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Payments");
@@ -266,9 +284,6 @@ namespace MenKosAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Occupants");
         }
     }
 }

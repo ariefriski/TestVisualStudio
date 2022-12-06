@@ -13,5 +13,11 @@ namespace MenKosAPI.Models
         public int? OccupantId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Occupant? Occupant { get; set; }
+
+
+        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int RoomId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Room? Room { get; set; }
     }
 }
