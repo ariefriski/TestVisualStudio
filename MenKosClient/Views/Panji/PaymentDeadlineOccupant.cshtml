@@ -42,21 +42,13 @@
                     <div class="row justify-content-center">
                         <div class="col-11">
 
-                            <form>
+                            <form id="extendRoomForm" method="post">
                                 <h2 class="pt-20 mt-30 ">Perpanjang Kamar</h2>
 
                                 <div class="form-group row">
-                                    <label class="col-12" for="example-select">Pilih Kamar</label>
+                                    <label class="col-12" for="example-select">Sewa Baru Berlaku Pada Tanggal</label>
                                     <div class="col-md-9">
-                                        <select class="form-control" id="selectedRoom" name="RoomId">
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-12" for="example-select">Pilih Tanggal Masuk</label>
-                                    <div class="col-md-9">
-                                        <input type="date" id="entryDate" name="EntryDate" class="form-control">
+                                        <input type="date" id="entryDate" name="EntryDate" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -66,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-12" for="example-disabled-input">Tanggal Keluar</label>
+                                    <label class="col-12" for="example-disabled-input">Sewa Berakhir Pada Tanggal</label>
                                     <div class="col-md-9">
                                         <input type="date" class="form-control" id="outDate" name="OutDate" value="" disabled>
                                     </div>
@@ -79,6 +71,27 @@
                                             <label for="material-disabled">Total Amount</label>
                                         </div>
                                     </div>
+                                </div>
+                                <h2 class="pt-20 mt-30 ">Bukti Bayar</h2>
+
+                                <div class="form-group row">
+                                    <label class="col-12" for="example-select">Tanggal Pembayaran</label>
+                                    <div class="col-md-9">
+                                        <input type="date" class="form-control" id="paymentDate" name="PaymentDate" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-12" for="example-select">Foto Butki Bayar</label>
+                                    <div class="col-md-9">
+                                        <input type="file" id="proofPayment" name="ProofPayment" class="form-control" value="contoh.jpg" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button id="saveBtn" type="submit" class="btn btn-alt-success" data-dismiss="modal">
+                                        <i class="fa fa-check"></i> Kirim
+                                    </button>
                                 </div>
                             </form>
 

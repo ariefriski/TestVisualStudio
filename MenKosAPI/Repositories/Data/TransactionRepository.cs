@@ -89,13 +89,13 @@ namespace MenKosAPI.Repositories.Data
 
             _occupantRepository.Create(occupant);
 
-            var newOccupantId = _context.Occupants.FirstOrDefault(o => o.NIK == newTransaction.NIK && o.Name == newTransaction.Name).Id;
+            //var newOccupantId = _context.Occupants.FirstOrDefault(o => o.NIK == newTransaction.NIK && o.Name == newTransaction.Name).Id;
 
             User user = new()
             {
                 Email = newTransaction.Email,
                 Password = Hashing.HashPassword(newTransaction.Password),
-                OccupantId = newOccupantId,
+                OccupantId = occupant.Id,
                 RoleId = 3
             };
 
@@ -105,32 +105,32 @@ namespace MenKosAPI.Repositories.Data
 
             Order order = new()
             {
-                OccupantId = newOccupantId,
+                OccupantId = occupant.Id,
                 EntryDate = newTransaction.EntryDate,
                 OutDate = newTransaction.OutDate,
             };
 
             _orderRepository.Create(order);
 
-            var newOrderId = _context.Orders.FirstOrDefault(o => o.OccupantId == newOccupantId && o.EntryDate == newTransaction.EntryDate).Id;
+            //var newOrderId = _context.Orders.FirstOrDefault(o => o.OccupantId == newOccupantId && o.EntryDate == newTransaction.EntryDate).Id;
 
             Payment payment = new()
             {
                 Amount = newTransaction.Amount,
-                PaymentDate = newTransaction.EntryDate,
-                ProofPayment = "coba.jpg",
+                PaymentDate = newTransaction.PaymentDate,
+                ProofPayment = newTransaction.ProofPayment,
                 Status = true,
-                OrderId = newOrderId
+                OrderId = order.Id
             };
 
             _paymentRepository.Create(payment);
 
-            var newPaymentId = _context.Payments.SingleOrDefault(p => p.OrderId == newOrderId).Id;
+            //var newPaymentId = _context.Payments.SingleOrDefault(p => p.OrderId == newOrderId).Id;
 
             var room = _context.Rooms.SingleOrDefault(r => r.Id == newTransaction.RoomId);
 
             room.Status = true;
-            room.PaymentId = newPaymentId;
+            room.PaymentId = payment.Id;
 
             var result = _roomRepository.Update(room);
 
@@ -232,7 +232,7 @@ namespace MenKosAPI.Repositories.Data
             {
 
      
-                var room = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).Where(r => r.Payment.Order.OccupantId == occupantId).AsEnumerable().FirstOrDefault(r =>
+                var room = _context.Rooms.Include(r => r.Payment).ThenInclude(p => p.Order).Include(r => r.RoomPrice).Where(r => r.Payment.Order.OccupantId == occupantId).AsEnumerable().FirstOrDefault(r =>
                     {
                         try
                         {
@@ -259,7 +259,12 @@ namespace MenKosAPI.Repositories.Data
                     Description = room.Description,
                     Floor = room.Floor,
                     Status = room.Status,
-                    RoomPrice = null,
+                    RoomPrice = new()
+                    {
+                        Id = room.RoomPrice.Id,
+                        Price = room.RoomPrice.Price,
+                        RoomType = room.RoomPrice.RoomType
+                    },
                     Payment = new()
                     {
                         Id = room.Payment.Id,

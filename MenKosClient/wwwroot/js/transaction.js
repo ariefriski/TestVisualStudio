@@ -234,6 +234,8 @@ function sendNewTransaction() {
     const outDateValue = new Date(document.querySelector('#outDate').value)
     const amountValue = +document.querySelector('#totalAmount').value
 
+    const proofPaymentFileName = document.querySelector('#proofPayment').files[0].name 
+
     const data = {
         Email: formData.get('Email'),
         Password: formData.get('Password'),
@@ -244,10 +246,12 @@ function sendNewTransaction() {
         City: formData.get('City'),
         Religion: formData.get('Religion'),
         BirthDate: formData.get('BirthDate'),
+        ProofPayment: proofPaymentFileName,
+        PaymentDate: formData.get('PaymentDate'),
         EntryDate: formData.get('EntryDate'),
         OutDate: outDateValue,
         Amount: amountValue,
-        RoomId: formData.get('RoomId')
+        RoomId: formData.get('RoomId'),
 
     }
 
