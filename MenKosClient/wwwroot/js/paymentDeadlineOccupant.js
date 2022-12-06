@@ -9,6 +9,11 @@ $.ajax({
     success: res => {
         console.log(res)
 
+        document.getElementById('extendRoomForm').setAttribute('data-room-id', res.Data.RoomId)
+        document.getElementById('extendRoomForm').setAttribute('data-occupant-id', res.Data.Payment.Order.OccupantId)
+
+
+
         const outDate = new Date(res.Data.Payment.Order.OutDate)
 
         const currentTime = new Date()
@@ -134,12 +139,14 @@ function sendExtendRoomRequest(event) {
     const totalAmountVal = document.getElementById('totalAmount').value
     const paymentDateVal = document.getElementById('paymentDate').value
     const proofPaymentFileName = document.getElementById('proofPayment').files[0].name 
-    const occupantIdVal = document.getElementById('occupantIdTitle').getAttribute('data-occupantid')
+    const occupantIdVal = document.getElementById('extendRoomForm').getAttribute('data-occupant-id')
+    const roomIdval = document.getElementById('extendRoomForm').getAttribute('data-room-id')
 
     const data = {
         OccupantId: occupantIdVal,
         EntryDate: entryDateVal,
         OutDate: outDateVal,
+        RoomId: roomIdval,
         TotalAmount: totalAmountVal,
         PaymentDate: paymentDateVal,
         ProofPayment: proofPaymentFileName
@@ -147,4 +154,7 @@ function sendExtendRoomRequest(event) {
 
     console.log(data)
 }
+
+
+
 

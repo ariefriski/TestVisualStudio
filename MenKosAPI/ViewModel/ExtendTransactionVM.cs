@@ -2,7 +2,7 @@
 
 namespace MenKosAPI.ViewModel
 {
-    public class ExtendTransaction
+    public class ExtendTransactionVM
     {
 
         public string ProofPayment { get; set; }
@@ -18,6 +18,8 @@ namespace MenKosAPI.ViewModel
 
 
         public int OccupantId { get; set; }
+
+        public int RoomId { get; set; }
 
     }
 }

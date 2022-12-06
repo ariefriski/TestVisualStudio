@@ -108,6 +108,7 @@ namespace MenKosAPI.Repositories.Data
                 OccupantId = occupant.Id,
                 EntryDate = newTransaction.EntryDate,
                 OutDate = newTransaction.OutDate,
+                RoomId = newTransaction.RoomId,
             };
 
             _orderRepository.Create(order);
