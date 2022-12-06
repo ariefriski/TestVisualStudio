@@ -146,7 +146,7 @@ function sendExtendRoomRequest(event) {
     const outDateVal = document.getElementById('outDate').value
     const totalAmountVal = document.getElementById('totalAmount').value
     const paymentDateVal = document.getElementById('paymentDate').value
-    const proofPaymentFileName = document.getElementById('proofPayment').files[0].name 
+    const proofPaymentFileName = document.getElementById('proofPayment').files[0].name
     const occupantIdVal = document.getElementById('extendRoomForm').getAttribute('data-occupant-id')
     const roomIdval = document.getElementById('extendRoomForm').getAttribute('data-room-id')
 
@@ -160,18 +160,46 @@ function sendExtendRoomRequest(event) {
         ProofPayment: proofPaymentFileName
     }
 
-    console.log(data)
 
-    $.ajax({
-        url: `https://localhost:7095/api/transaction/extendtransaction`,
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: res => {
-            window.location.reload()
+    Swal.fire({
+        title: 'Kirim Bukti Pembayaran',
+        text: "Anda yakin bukti sudah benar?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, kirim!',
+        cancelButtonText: 'batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+
+            $.ajax({
+                url: `https://localhost:7095/api/transaction/extendtransaction`,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: res => {
+                    window.location.reload()
+                }
+            })
+
+            Swal.fire(
+                'Terkirim!',
+                'Tunggu admin akan segera memvalidasi pembayaran anda.',
+                'sukses'
+            ).then(result => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
         }
     })
+
+
+
+
 }
 
 

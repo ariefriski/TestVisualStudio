@@ -272,26 +272,81 @@ function sendNewTransaction() {
 
 //admin validasi payment yang status masih on hold
 function approvePayment(paymentId) {
-    $.ajax({
-        url: `https://localhost:7095/api/Payment/${paymentId}`,
-        type: 'PATCH',
-        contentType: 'application/json',
-        success: function (res) {
-            console.log(res)
-            window.location.reload()
+
+    Swal.fire({
+        title: 'Simpan Transaksi Pembayaran',
+        text: "Anda yakin pembayaran sudah valid?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, simpan!',
+        cancelButtonText: 'batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `https://localhost:7095/api/Payment/${paymentId}`,
+                type: 'PATCH',
+                contentType: 'application/json',
+                success: function (res) {
+                    console.log(res)
+                    window.location.reload()
+                }
+            })
+
+            Swal.fire(
+                'Tersimpan!',
+                'Transaksi pembayaran telah tersimpan.',
+                'sukses'
+            ).then(result => {
+                if (result.isConfirmed) {
+                    document.location.reload()
+                }
+            })
         }
     })
+
+    
 }
 
 //admin reject payment status masih on hold
 function rejectPayment(paymentId) {
-    $.ajax({
-        url: `https://localhost:7095/api/Payment/${paymentId}`,
-        type: 'DELETE',
-        contentType: 'application/json',
-        success: function (res) {
-            console.log(res)
-            window.location.reload()
+    Swal.fire({
+        title: 'Hapus Transaksi Pembayaran',
+        text: "Transaksi pembayan akan terhapus!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `https://localhost:7095/api/Payment/${paymentId}`,
+                type: 'DELETE',
+                contentType: 'application/json',
+                success: function (res) {
+                    console.log(res)
+
+                }
+            })
+
+            Swal.fire(
+                'Terhapus!',
+                'Transaksi pembayaran telah terhapus.',
+                'sukses'
+            ).then(result => {
+                if (result.isConfirmed) {
+                    document.location.reload()
+                }
+            })
         }
     })
+
+
 }
+
+
+
+
