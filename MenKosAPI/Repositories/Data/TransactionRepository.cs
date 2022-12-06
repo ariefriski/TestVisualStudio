@@ -278,7 +278,7 @@ namespace MenKosAPI.Repositories.Data
                             Id = room.Payment.Order.Id,
                             EntryDate = room.Payment.Order.EntryDate,
                             OutDate = room.Payment.Order.OutDate,
-                            OccupantId = null,
+                            OccupantId = room.Payment.Order.OccupantId,
                             Occupant = null
                         }
                     }
