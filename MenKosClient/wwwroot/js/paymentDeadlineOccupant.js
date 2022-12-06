@@ -147,12 +147,21 @@ function sendExtendRoomRequest(event) {
         EntryDate: entryDateVal,
         OutDate: outDateVal,
         RoomId: roomIdval,
-        TotalAmount: totalAmountVal,
+        Amount: totalAmountVal,
         PaymentDate: paymentDateVal,
         ProofPayment: proofPaymentFileName
     }
 
     console.log(data)
+
+    $.ajax({
+        url: `https://localhost:7095/api/transaction/extendtransaction`,
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: res => console.log(res)
+    })
 }
 
 
