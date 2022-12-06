@@ -1,6 +1,8 @@
-﻿const occupantId = document.getElementById('occupantIdTitle').dataset.occupantid
+﻿const occupantId = document.getElementById('billMain').dataset.occupantid
 
 const smallEl = document.getElementById('infoMessage')
+
+const blockContentEl = document.querySelector('#billMain')
 
 $.ajax({
     url: `https://localhost:7095/api/transaction/paymentdeadline/${occupantId}`,
@@ -8,6 +10,9 @@ $.ajax({
     contentType: 'application/json',
     success: res => {
         console.log(res)
+
+        blockContentEl.classList.remove('d-none')
+
 
         document.getElementById('extendRoomForm').setAttribute('data-room-id', res.Data.RoomId)
         document.getElementById('extendRoomForm').setAttribute('data-occupant-id', res.Data.Payment.Order.OccupantId)
@@ -43,6 +48,9 @@ $.ajax({
 
         initPopulatedForm(newEntryDate, roomPrice)
 
+    },
+    error: err => {
+        smallEl.textContent = `Belum ada tagihan!`
     }
 })
 
@@ -160,7 +168,9 @@ function sendExtendRoomRequest(event) {
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(data),
-        success: res => console.log(res)
+        success: res => {
+            window.location.reload()
+        }
     })
 }
 

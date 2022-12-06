@@ -18,7 +18,7 @@
     <div class="content">
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title"><small id="infoMessage">Daftar kamar yang butuh perpanjang</small></h3>
+                <h3 class="block-title"><small id="infoMessage"></small></h3>
                 <div class="block-options">
                     <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                     <button type="button" class="btn-block-option" data-toggle="block-option" data-action="pinned_toggle">
@@ -33,11 +33,10 @@
                     </button>
                 </div>
             </div>
-            <div class="block-content">
-
+            <div id="billMain" class="block-content d-none" data-occupantId=@Model.ToString() >
 
                 <div>
-                    <h1 id="occupantIdTitle" data-occupantId=@Model class="display-4">@Model.ToString()</h1>
+                   
 
                     <div class="row justify-content-center">
                         <div class="col-11">
