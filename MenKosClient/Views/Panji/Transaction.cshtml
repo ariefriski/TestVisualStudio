@@ -6,7 +6,15 @@
 @section Scripts{
     <script src="~/lib/assets/js/plugins/datatables/jquery.dataTables.min.js" defer></script>
     <script src="~/lib/assets/js/plugins/datatables/dataTables.bootstrap4.min.js" defer></script>
-    
+
+    <!-- Page JS Plugins -->
+    <script src="~/lib/assets/js/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/assets/js/plugins/jquery-validation/additional-methods.js"></script>
+
+    <!-- Page JS Helpers (Select2 plugin) -->
+    <script>jQuery(function () { Codebase.helpers('select2'); });</script>
+
     <script src="~/js/transaction.js" defer></script>
 
 }
@@ -32,37 +40,37 @@
             </div>
             <div class="block-content">
 
-         
+
 
                 <button type="button" class="btn btn-success mr-5 " data-toggle="modal" data-target="#modal-large">
                     <i class="fa fa-plus mr-5"></i> Tambah Transaksi Penghuni Baru
                 </button>
 
                 <div class="text-right">
-                    
+
 
 
                     <div class="row justify-content-center">
                         <div class="col-11">
 
-                    <table id="paymentTable" class="table table-bordered table-striped table-vcenter js-dataTable-full text-center">
-                        <thead class="table-dark text-light">
-                            <tr>
-                                <th>Nama</th>
-                                <th>Jumlah Uang</th>
-                                <th>Bukti Bayar</th>
-                                <th>Tanggal Masuk</th>
-                                <th>Tanggal Keluar</th>
-                                <th>Tanggal Pembayaran</th>
-                                <th>Status</th>
-                                <th class="w-25">Aksi</th>
+                            <table id="paymentTable" class="table table-bordered table-striped table-vcenter js-dataTable-full text-center">
+                                <thead class="table-dark text-light">
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jumlah Uang</th>
+                                        <th>Bukti Bayar</th>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Tanggal Keluar</th>
+                                        <th>Tanggal Pembayaran</th>
+                                        <th>Status</th>
+                                        <th class="w-25">Aksi</th>
 
-                            </tr>
-                        </thead>
-                        <tbody class="table-striped">
-                        </tbody>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-striped">
+                                </tbody>
 
-                    </table>
+                            </table>
                         </div>
                     </div>
 
@@ -90,17 +98,17 @@
                     </div>
                     <div class="block-content">
                         <div class="block">
-      
+
                             <div class="block-content">
 
 
 
-                                <form id="transactionForm">
+                                <form id="transactionForm" novalidate>
                                     <h2 class="pt-20 mt-30 ">Data Diri Penghuni</h2>
-                                    <div class="form-group row">
+                                    <div class="form-group row is-invalid">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="occupantNIK" name="NIK">
+                                                <input type="text" class="form-control" id="occupantNIK" name="NIK" required>
                                                 <label for="occupantNIK">NIK</label>
                                             </div>
                                         </div>
@@ -108,7 +116,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="occupantName" name="Name">
+                                                <input type="text" class="form-control" id="occupantName" name="Name" required>
                                                 <label for="occupantName">Nama</label>
                                             </div>
                                         </div>
@@ -129,7 +137,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="occupantContact" name="Contact">
+                                                <input type="text" class="form-control" id="occupantContact" name="Contact" required>
                                                 <label for="occupantContact">Nomor HP</label>
                                             </div>
                                         </div>
@@ -137,7 +145,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="occupantCity" name="City">
+                                                <input type="text" class="form-control" id="occupantCity" name="City" required>
                                                 <label for="occupantCity">Kota</label>
                                             </div>
                                         </div>
@@ -145,7 +153,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="text" class="form-control" id="occupantReligion" name="Religion">
+                                                <input type="text" class="form-control" id="occupantReligion" name="Religion" required>
                                                 <label for="occupantReligion">Agama</label>
                                             </div>
                                         </div>
@@ -153,7 +161,7 @@
                                     <div class="form-group row">
                                         <label class="col-12" for="occupantBirthDate">Tanggal Lahir</label>
                                         <div class="col-md-9">
-                                            <input type="date" id="occupantBirthDate" name="BirthDate" class="form-control">
+                                            <input type="date" id="occupantBirthDate" name="BirthDate" class="form-control" required>
                                         </div>
                                     </div>
 
@@ -161,7 +169,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="email" class="form-control" id="userEmail" name="Email">
+                                                <input type="email" class="form-control" id="userEmail" name="Email" required>
                                                 <label for="userEmail">Email</label>
                                             </div>
                                         </div>
@@ -169,7 +177,7 @@
                                     <div class="form-group row">
                                         <div class="col-md-9">
                                             <div class="form-material floating">
-                                                <input type="password" class="form-control" id="userPassword" name="Password">
+                                                <input type="password" class="form-control" id="userPassword" name="Password" required>
                                                 <label for="userPassword">Password</label>
                                             </div>
                                         </div>
@@ -178,9 +186,9 @@
                                     <h2 class="pt-20 mt-30 ">Sewa Kamar</h2>
 
                                     <div class="form-group row">
-                                        <label class="col-12" for="example-select">Pilih Kamar</label>
+                                        <label class="col-12" for="selectedRoom">Pilih Kamar</label>
                                         <div class="col-md-9">
-                                            <select class="form-control" id="selectedRoom" name="RoomId">
+                                            <select class="form-control" id="selectedRoom" name="RoomId" required>
                                             </select>
                                         </div>
                                     </div>
@@ -188,7 +196,7 @@
                                     <div class="form-group row">
                                         <label class="col-12" for="example-select">Pilih Tanggal Masuk</label>
                                         <div class="col-md-9">
-                                            <input type="date" id="entryDate" name="EntryDate" class="form-control">
+                                            <input type="date" id="entryDate" name="EntryDate" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -213,40 +221,42 @@
                                         </div>
                                     </div>
 
-                                     <h2 class="pt-20 mt-30 ">Bukti Bayar</h2>
+                                    <h2 class="pt-20 mt-30 ">Bukti Bayar</h2>
 
                                     <div class="form-group row">
                                         <label class="col-12" for="example-select">Tanggal Pembayaran</label>
                                         <div class="col-md-9">
-                                            <input type="date" class="form-control" id="paymentDate" name="PaymentDate" value="">
+                                            <input type="date" class="form-control" id="paymentDate" name="PaymentDate" value="" required>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-12" for="example-select">Foto Butki Bayar</label>
                                         <div class="col-md-9">
-                                            <input type="file" id="proofPayment" name="ProofPayment" class="form-control" value="contoh.jpg">
+                                            <input type="file" id="proofPayment" name="ProofPayment" class="form-control" value="contoh.jpg" required>
                                         </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Tutup</button>
+                                        <button id="saveBtn" type="submit" class="btn btn-alt-success">
+                                            <i class="fa fa-check"></i> Simpan
+                                        </button>
                                     </div>
 
 
 
-                                    @*             <div class="form-group row">
-                                <div class="col-md-9">
-                                <button type="submit" class="btn btn-alt-primary">Submit</button>
-                                </div>
-                                </div>*@
                                 </form>
+                                @*             <div class="form-group row">
+                            <div class="col-md-9">
+                            <button type="submit" class="btn btn-alt-primary">Submit</button>
+                            </div>
+                            </div>*@
                             </div>
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Tutup</button>
-                        <button id="saveBtn" type="button" class="btn btn-alt-success" data-dismiss="modal">
-                            <i class="fa fa-check"></i> Simpan
-                        </button>
-                    </div>
+
                 </div>
             </div>
         </div>
