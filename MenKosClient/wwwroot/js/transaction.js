@@ -70,8 +70,7 @@ $(document).ready(function () {
             {
                 data: 'PaymentId',
                 render: (data,type,row,meat) => {
-                    console.log(data);
-                    console.log(row);
+               
                     return row.Status ? `<button type="button" class="btn btn-alt-primary mr-5 mb-5" disabled><i class="fa fa-thumbs-up mr-5"></i>Valid</button>` : `<button type="button" class="btn btn-alt-primary mr-5 mb-5"   onclick="approvePayment(${data})"><i class="fa fa-thumbs-up mr-5"></i>Valid</button> <button type="button" class="btn btn-alt-danger mr-5 mb-5" onclick="rejectPayment(${data})"><i class="fa fa-times mr-5"></i>Reject</button>`
               
                 }
@@ -174,7 +173,9 @@ function calculateOutDate() {
 $.ajax({
     url: 'https://localhost:7095/api/Room',
     type: 'GET',
+    async: false,
     success: function (res) {
+
      
         let temp = `<option value="" disabled selected>pilih kamar</option>`
         res.Data.forEach(room => {
@@ -183,9 +184,29 @@ $.ajax({
                 return
             }
 
-            temp += `<option data-room-price-id="${room.RoomPriceId}" value="${room.Id}">Kamar no ${room.Id}</option>`
+        
+            $.ajax({
+                url: `https://localhost:7095/api/RoomPrice/${room.RoomPriceId}`,
+                type: 'GET',
+                async: false,
+                success: function (res) {
+
+            
+
+                    temp += `<option data-room-price-id="${room.RoomPriceId}" value="${room.Id}">Kamar no ${room.Id} (Tipe Kamar ${res.Data.RoomType})</option>`
+
+
+
+                }
+            })
+
+
+
+
 
         })
+
+        console.log(temp)
 
         document.getElementById('selectedRoom').innerHTML = temp
 
