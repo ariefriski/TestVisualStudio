@@ -222,11 +222,26 @@ function calculateTotalAmount(event) {
 
 
 //submit form
-document.getElementById('saveBtn').addEventListener('click', sendNewTransaction)
+document.getElementById('transactionForm').addEventListener('submit', sendNewTransaction)
 
 
 
-function sendNewTransaction() {
+function sendNewTransaction(event) {
+
+    event.preventDefault()
+
+    const formElement = event.target
+
+    console.log(formElement.checkValidity())
+    console.log(formElement.reportValidity())
+
+    if (!formElement.checkValidity()) {
+        event.stopPropagation()
+        formElement.classList.add('was-validated')
+        return
+    }
+   
+
     const formEl = document.querySelector('#transactionForm');
     const formData = new FormData(formEl);
 
