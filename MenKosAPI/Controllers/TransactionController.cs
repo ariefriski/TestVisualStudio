@@ -48,7 +48,7 @@ namespace MenKosAPI.Controllers
             {
 
 
-                return BadRequest(new PostResponse { Success = false, ErrorCode = "S01", Error = "Invalid post request" });
+                return BadRequest(new PostResponseNewTransaction { Success = false, ErrorCode = "S01", Error = "Invalid post request" });
 
 
             }
@@ -60,7 +60,7 @@ namespace MenKosAPI.Controllers
             {
 
 
-                return BadRequest(new PostResponse { Success = false, ErrorCode = "S02", Error = "Invalid post header" });
+                return BadRequest(new PostResponseNewTransaction { Success = false, ErrorCode = "S02", Error = "Invalid post header" });
 
 
             }

@@ -75,7 +75,7 @@ namespace MenKosAPI.Repositories.Data
         }
 
         //public int CreateNewTransaction(NewTransactionVM newTransaction)
-        public async Task<PostResponse> CreateNewTransaction(NewTransactionVM newTransaction)
+        public async Task<PostResponseNewTransaction> CreateNewTransaction(NewTransactionVM newTransaction)
 
         {
 
@@ -139,7 +139,7 @@ namespace MenKosAPI.Repositories.Data
 
             if (saveResponse < 0)
             {
-                return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
+                return new PostResponseNewTransaction { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
             }
 
             var postEntity = postPayment.Entity;
@@ -176,9 +176,9 @@ namespace MenKosAPI.Repositories.Data
             if (result > 0)
             {
                 //return 1; // return Ok
-            return new PostResponse { Success = true, Post = paymentModel };
+            return new PostResponseNewTransaction { Success = true, Post = paymentModel };
             }
-            return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" };
+            return new PostResponseNewTransaction { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" };
             //return 2; // return BadRequest
 
         }

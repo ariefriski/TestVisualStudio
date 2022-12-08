@@ -2,7 +2,7 @@
 
 namespace MenKosAPI.Responses
 {
-    public class PostResponse : BaseResponse
+    public class PostResponseNewTransaction : BaseResponse
     {
         public Payment Post { get; set; }
     }

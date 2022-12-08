@@ -180,7 +180,9 @@ $.ajax({
         let temp = `<option value="" disabled selected>pilih kamar</option>`
         res.Data.forEach(room => {
 
-            if (room.Status == true) {
+            console.log(room.Status == true && room.PaymentId)
+
+            if (room.Status == true && room.PaymentId != null) {
                 return
             }
 
@@ -191,7 +193,7 @@ $.ajax({
                 async: false,
                 success: function (res) {
 
-
+                    console.log
 
                     temp += `<option data-room-price-id="${room.RoomPriceId}" value="${room.Id}">Kamar no ${room.Id} (Tipe Kamar ${res.Data.RoomType})</option>`
 
@@ -343,7 +345,7 @@ function sendNewTransaction(event) {
         data: formData,
         success: function (res) {
             console.log(res);
-            //window.location.reload()
+            window.location.reload()
         },
         error: function (err) {
             console.log(err)

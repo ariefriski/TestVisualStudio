@@ -146,19 +146,21 @@ function sendExtendRoomRequest(event) {
     const outDateVal = document.getElementById('outDate').value
     const totalAmountVal = document.getElementById('totalAmount').value
     const paymentDateVal = document.getElementById('paymentDate').value
-    const proofPaymentFileName = document.getElementById('proofPayment').files[0].name
+    const proofPaymentFileName = document.getElementById('proofPayment').files[0]
     const occupantIdVal = document.getElementById('extendRoomForm').getAttribute('data-occupant-id')
     const roomIdval = document.getElementById('extendRoomForm').getAttribute('data-room-id')
 
-    const data = {
-        OccupantId: occupantIdVal,
-        EntryDate: entryDateVal,
-        OutDate: outDateVal,
-        RoomId: roomIdval,
-        Amount: totalAmountVal,
-        PaymentDate: paymentDateVal,
-        ProofPayment: proofPaymentFileName
-    }
+    //const data = {
+    //    OccupantId: occupantIdVal,
+    //    EntryDate: entryDateVal,
+    //    OutDate: outDateVal,
+    //    RoomId: roomIdval,
+    //    Amount: totalAmountVal,
+    //    PaymentDate: paymentDateVal,
+    //    ProofPayment: proofPaymentFileName
+    //}
+
+    const formData = new
 
 
     Swal.fire({
@@ -174,16 +176,33 @@ function sendExtendRoomRequest(event) {
         if (result.isConfirmed) {
 
 
+            //$.ajax({
+            //    url: `https://localhost:7095/api/transaction/extendtransaction`,
+            //    type: 'POST',
+            //    dataType: 'json',
+            //    contentType: 'application/json',
+            //    data: JSON.stringify(data),
+            //    success: res => {
+            //        window.location.reload()
+            //    }
+            //})
+
+
             $.ajax({
-                url: `https://localhost:7095/api/transaction/extendtransaction`,
+                url: 'https://localhost:7095/api/Transaction/extendtransaction',
                 type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                success: res => {
-                    window.location.reload()
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (res) {
+                    console.log(res);
+                    //window.location.reload()
+                },
+                error: function (err) {
+                    console.log(err)
                 }
             })
+
 
             Swal.fire(
                 'Terkirim!',
