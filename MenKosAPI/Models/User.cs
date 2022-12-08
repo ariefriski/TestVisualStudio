@@ -11,12 +11,12 @@ namespace MenKosAPI.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? OccupantId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Occupant? occupant { get; set; }
+        public Occupant? Occupant { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? RoleId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Role? role { get; set; }
+        public Role? Role { get; set; }
 
     }
 }

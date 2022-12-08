@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MenKosAPI.Models
 {
-    public class ComplaintTicket
+    public class Complaint
     {
         [Key]
         public int Id { get; set; }

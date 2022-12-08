@@ -20,6 +20,8 @@ namespace MenKosAPI.Context
 
         public DbSet<User> Users  { get; set; }
 
+        public DbSet<Complaint> Complaints { get; set; }
+
         public partial class Payment
         {
             public int Id { get; set; }
