@@ -4,8 +4,8 @@ namespace MenKosAPI.ViewModel
 {
     public class ExtendTransactionVM
     {
-
-        public string ProofPayment { get; set; }
+        public IFormFile Image { get; set; }
+        public string? ProofPayment { get; set; }
 
         public DateTime PaymentDate { get; set; }
 

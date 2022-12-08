@@ -146,7 +146,7 @@ function sendExtendRoomRequest(event) {
     const outDateVal = document.getElementById('outDate').value
     const totalAmountVal = document.getElementById('totalAmount').value
     const paymentDateVal = document.getElementById('paymentDate').value
-    const proofPaymentFileName = document.getElementById('proofPayment').files[0]
+    const imageFile = document.getElementById('Image').files[0]
     const occupantIdVal = document.getElementById('extendRoomForm').getAttribute('data-occupant-id')
     const roomIdval = document.getElementById('extendRoomForm').getAttribute('data-room-id')
 
@@ -160,7 +160,17 @@ function sendExtendRoomRequest(event) {
     //    ProofPayment: proofPaymentFileName
     //}
 
-    const formData = new
+    const formData = new FormData()
+
+    formData.append('OccupantId', occupantIdVal)
+    formData.append('EntryDate', entryDateVal)
+    formData.append('OutDate', outDateVal)
+    formData.append('RoomId', roomIdval)
+    formData.append('Amount', totalAmountVal)
+    formData.append('PaymentDate', paymentDateVal)
+    formData.append('Image', imageFile)
+
+
 
 
     Swal.fire({
@@ -191,12 +201,13 @@ function sendExtendRoomRequest(event) {
             $.ajax({
                 url: 'https://localhost:7095/api/Transaction/extendtransaction',
                 type: 'POST',
+                enctype: 'multipart/form-data',
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function (res) {
                     console.log(res);
-                    //window.location.reload()
+                    
                 },
                 error: function (err) {
                     console.log(err)

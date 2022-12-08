@@ -38,7 +38,7 @@ namespace MenKosAPI.Controllers
 
 
         [HttpPost("NewTransaction")]
-        public async Task<IActionResult> CreateTransaction([FromForm]NewTransactionVM newTransaction)
+        public async Task<IActionResult> CreateTransaction([FromForm] NewTransactionVM newTransaction)
         {
             //var result = _transactionRepository.CreateNewTransaction(newTransaction);
 
@@ -72,7 +72,7 @@ namespace MenKosAPI.Controllers
             {
 
 
-                await _transactionRepository.SavePayment(newTransaction);
+                await _transactionRepository.SavePaymentNewTransaction(newTransaction);
 
 
             }
@@ -148,25 +148,68 @@ namespace MenKosAPI.Controllers
             return BadRequest(new
             {
                 Message = "Data not found!",
-                Status = 400
+                Status = 200
             });
         }
 
+        //public IActionResult CreateExtendRequestTransaction(ExtendTransactionVM extendTransaction)
         [HttpPost("ExtendTransaction")]
-        public IActionResult CreateExtendRequestTransaction(ExtendTransactionVM extendTransaction)
+        public async Task<IActionResult> CreateExtendTransaction([FromForm] ExtendTransactionVM extendTransaction)
         {
-            var result = _transactionRepository.CreateExtendTransaction(extendTransaction);
-            return result switch
+
+            if (extendTransaction == null)
+
+
             {
-                1 => Ok(new
-                {
-                    Message = "Buat Permintaan Perpanjang Kamar Berhasil!",
-                    StatusCode = 200
-                })
-            };
+
+
+                return BadRequest(new PostResponseExtendTransaction { Success = false, ErrorCode = "S01", Error = "Invalid post request" });
+
+
+            }
+
+
+            if (string.IsNullOrEmpty(Request.GetMultipartBoundary()))
+
+
+            {
+
+
+                return BadRequest(new PostResponseExtendTransaction { Success = false, ErrorCode = "S02", Error = "Invalid post header" });
+
+
+            }
+
+
+            if (extendTransaction.Image != null)
+
+
+            {
+
+
+                await _transactionRepository.SavePaymentExtendTransaction(extendTransaction);
+
+
+            }
+
+
+            var postResponse = await _transactionRepository.CreateExtendTransaction(extendTransaction);
+
+
+            if (!postResponse.Success)
+
+
+            {
+
+
+                return NotFound(postResponse);
+
+
+            }
+
+
+            return Ok(postResponse.Post);
+
         }
-
-
-
     }
 }

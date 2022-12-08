@@ -49,6 +49,7 @@ namespace MenKosAPI.Repositories.Data
                         EntryDate = payment.Order.EntryDate,
                         OutDate = payment.Order.OutDate,
                         OccupantId = null,
+                        RoomId = payment.Order.RoomId,
                         Occupant = new()
                         {
                             Id = payment.Order.Occupant.Id,
@@ -150,7 +151,8 @@ namespace MenKosAPI.Repositories.Data
                 Amount = postEntity.Amount,
                 PaymentDate = postEntity.PaymentDate,
                 Status = postEntity.Status,
-                ProofPayment = Path.Combine(postEntity.ProofPayment)
+                ProofPayment = Path.Combine(postEntity.ProofPayment),
+                OrderId = postEntity.OrderId
             };
 
 
@@ -183,7 +185,7 @@ namespace MenKosAPI.Repositories.Data
 
         }
 
-        public async Task SavePayment(NewTransactionVM newTransaction)
+        public async Task SavePaymentNewTransaction(NewTransactionVM newTransaction)
         {
             var uniqueFileName = FileHelper.GetUniqueFileName(newTransaction.Image.FileName);
 
@@ -337,7 +339,10 @@ namespace MenKosAPI.Repositories.Data
 
         }
 
-        public int CreateExtendTransaction(ExtendTransactionVM extendTransaction)
+
+
+        //public int CreateExtendTransaction(ExtendTransactionVM extendTransaction)
+        public async Task<PostResponseExtendTransaction> CreateExtendTransaction(ExtendTransactionVM extendTransaction)
         {
             Order order = new()
             {
@@ -349,9 +354,9 @@ namespace MenKosAPI.Repositories.Data
 
 
             var orderResult = _orderRepository.Create(order);
-            if (orderResult <= 0)
+            if (orderResult < 0)
             {
-                return 2;
+                return new PostResponseExtendTransaction { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
             }
 
             Payment payment = new()
@@ -363,14 +368,61 @@ namespace MenKosAPI.Repositories.Data
                 Status = false,
             };
 
-            _paymentRepository.Create(payment);
-            if (orderResult <= 0)
+            var postPayment = await _context.Payments.AddAsync(payment);
+
+            var saveResponse = await _context.SaveChangesAsync();
+
+            if (saveResponse < 0)
             {
-                return 2;
+                return new PostResponseExtendTransaction { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
             }
 
-            return 1;
+            var postEntity = postPayment.Entity;
 
+            var paymentModel = new Payment
+            {
+                Amount = postEntity.Amount,
+                PaymentDate = postEntity.PaymentDate,
+                Status = postEntity.Status,
+                ProofPayment = Path.Combine(postEntity.ProofPayment),
+                OrderId = postEntity.OrderId
+            };
+
+
+            //_paymentRepository.Create(payment);
+            //if (orderResult > 0)
+            
+                return new PostResponseExtendTransaction { Success = true, Post = paymentModel }; ;
+            
+
+            //return new PostResponseExtendTransaction { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
+
+
+        }
+
+        public async Task SavePaymentExtendTransaction (ExtendTransactionVM extendTransaction)
+        {
+            var uniqueFileName = FileHelper.GetUniqueFileName(extendTransaction.Image.FileName);
+
+
+            var uploads = Path.Combine(@"C:\Users\panji\Documents\panji\MCC\Final Project\MenKosClient\wwwroot", "users", "extend", extendTransaction.RoomId.ToString());
+
+
+            var filePath = Path.Combine(uploads, uniqueFileName);
+
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+
+            await extendTransaction.Image.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+
+
+
+            extendTransaction.ProofPayment = Path.Combine("/users/extend/", extendTransaction.RoomId.ToString() + "/", uniqueFileName);
+
+
+            return;
 
         }
     }
