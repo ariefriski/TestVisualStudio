@@ -1,5 +1,6 @@
 ﻿using MenKosAPI.Context;
 using MenKosAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MenKosAPI.Repositories.Data
 {
@@ -55,5 +56,12 @@ namespace MenKosAPI.Repositories.Data
 
 
         }
+
+
+        public List<Payment> GetPayment()
+        {
+            return _context.Payments.ToList();
+        }
+
     }
 }

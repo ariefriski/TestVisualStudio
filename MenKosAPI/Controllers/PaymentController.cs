@@ -35,5 +35,12 @@ namespace MenKosAPI.Controllers
                 })
             };
         }
+
+        [HttpGet("getpayment")]
+        public IActionResult GetPayment()
+        {
+            var data = paymentRepository.GetPayment();
+            return Ok( new { Data = data });
+        }
     }
 }

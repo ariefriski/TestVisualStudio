@@ -1,6 +1,8 @@
 ﻿using MenKosAPI.Context;
 using MenKosAPI.Handler;
+using MenKosAPI.Helpers;
 using MenKosAPI.Models;
+using MenKosAPI.Responses;
 using MenKosAPI.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -72,8 +74,12 @@ namespace MenKosAPI.Repositories.Data
             return transactions;
         }
 
-        public int CreateNewTransaction(NewTransactionVM newTransaction)
+        //public int CreateNewTransaction(NewTransactionVM newTransaction)
+        public async Task<PostResponse> CreateNewTransaction(NewTransactionVM newTransaction)
+
         {
+
+
             Occupant occupant = new()
             {
                 NIK = newTransaction.NIK,
@@ -89,7 +95,7 @@ namespace MenKosAPI.Repositories.Data
 
             _occupantRepository.Create(occupant);
 
-            //var newOccupantId = _context.Occupants.FirstOrDefault(o => o.NIK == newTransaction.NIK && o.Name == newTransaction.Name).Id;
+
 
             User user = new()
             {
@@ -113,20 +119,52 @@ namespace MenKosAPI.Repositories.Data
 
             _orderRepository.Create(order);
 
-            //var newOrderId = _context.Orders.FirstOrDefault(o => o.OccupantId == newOccupantId && o.EntryDate == newTransaction.EntryDate).Id;
 
-            Payment payment = new()
+
+
+            //var payment = new MyContext.Payment
+            var payment = new Payment
             {
                 Amount = newTransaction.Amount,
+                OrderId = order.Id,
                 PaymentDate = newTransaction.PaymentDate,
-                ProofPayment = newTransaction.ProofPayment,
                 Status = true,
-                OrderId = order.Id
+                ProofPayment = newTransaction.ProofPayment
+
             };
 
-            _paymentRepository.Create(payment);
+            var postPayment = await _context.Payments.AddAsync(payment);
 
-            //var newPaymentId = _context.Payments.SingleOrDefault(p => p.OrderId == newOrderId).Id;
+            var saveResponse = await _context.SaveChangesAsync();
+
+            if (saveResponse < 0)
+            {
+                return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" }; ;
+            }
+
+            var postEntity = postPayment.Entity;
+
+            var paymentModel = new Payment
+            {
+                Id = postEntity.Id,
+                Amount = postEntity.Amount,
+                PaymentDate = postEntity.PaymentDate,
+                Status = postEntity.Status,
+                ProofPayment = Path.Combine(postEntity.ProofPayment)
+            };
+
+
+            //Payment payment = new()
+            //{
+            //    Amount = newTransaction.Amount,
+            //    PaymentDate = newTransaction.PaymentDate,
+            //    ProofPayment = newTransaction.ProofPayment,
+            //    Status = true,
+            //    OrderId = order.Id
+            //};
+
+            //_paymentRepository.Create(payment);
+
 
             var room = _context.Rooms.SingleOrDefault(r => r.Id == newTransaction.RoomId);
 
@@ -137,10 +175,37 @@ namespace MenKosAPI.Repositories.Data
 
             if (result > 0)
             {
-                return 1; // return Ok
+                //return 1; // return Ok
+            return new PostResponse { Success = true, Post = paymentModel };
             }
+            return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" };
+            //return 2; // return BadRequest
 
-            return 2; // return BadRequest
+        }
+
+        public async Task SavePayment(NewTransactionVM newTransaction)
+        {
+            var uniqueFileName = FileHelper.GetUniqueFileName(newTransaction.Image.FileName);
+
+
+            var uploads = Path.Combine(@"C:\Users\panji\Documents\panji\MCC\Final Project\MenKosClient\wwwroot", "users", "payment", newTransaction.NIK.ToString());
+
+
+            var filePath = Path.Combine(uploads, uniqueFileName);
+
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+
+            await newTransaction.Image.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+
+
+
+            newTransaction.ProofPayment = Path.Combine("/users/payment/", newTransaction.NIK.ToString() + "/", uniqueFileName);
+
+
+            return;
 
         }
 
@@ -265,7 +330,7 @@ namespace MenKosAPI.Repositories.Data
                 };
                 return roomPaymentOrderOccupant;
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -281,10 +346,10 @@ namespace MenKosAPI.Repositories.Data
                 OccupantId = extendTransaction.OccupantId,
                 RoomId = extendTransaction.RoomId,
             };
-            
-            
+
+
             var orderResult = _orderRepository.Create(order);
-            if(orderResult <= 0)
+            if (orderResult <= 0)
             {
                 return 2;
             }
@@ -299,14 +364,14 @@ namespace MenKosAPI.Repositories.Data
             };
 
             _paymentRepository.Create(payment);
-            if(orderResult <= 0)
+            if (orderResult <= 0)
             {
                 return 2;
             }
 
             return 1;
 
-            
+
         }
     }
 

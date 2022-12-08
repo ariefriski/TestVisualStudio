@@ -23,9 +23,9 @@ $(document).ready(function () {
             },
 
             {
-                data: "ProofPayment",
-                render: (data) => {
-                    return data;
+                data: null,
+                "render": function (data, type, row, meta) {
+                    return `<img src="${data.ProofPayment}" width="350" >`;
                 }
             },
             {
@@ -69,10 +69,10 @@ $(document).ready(function () {
             },
             {
                 data: 'PaymentId',
-                render: (data,type,row,meat) => {
-               
+                render: (data, type, row, meat) => {
+
                     return row.Status ? `<button type="button" class="btn btn-alt-primary mr-5 mb-5" disabled><i class="fa fa-thumbs-up mr-5"></i>Valid</button>` : `<button type="button" class="btn btn-alt-primary mr-5 mb-5"   onclick="approvePayment(${data})"><i class="fa fa-thumbs-up mr-5"></i>Valid</button> <button type="button" class="btn btn-alt-danger mr-5 mb-5" onclick="rejectPayment(${data})"><i class="fa fa-times mr-5"></i>Reject</button>`
-              
+
                 }
             }
 
@@ -160,13 +160,13 @@ function calculateOutDate() {
     //calculate amount when change rentperiod 
     const totalAmountElement = document.getElementById('totalAmount')
 
-    
+
 
     const roomPrice = document.getElementById('totalAmount').getAttribute('data-room-price')
 
-    totalAmountElement.value = +roomPrice * +rentPeriod 
+    totalAmountElement.value = +roomPrice * +rentPeriod
 
-   
+
 }
 
 
@@ -176,7 +176,7 @@ $.ajax({
     async: false,
     success: function (res) {
 
-     
+
         let temp = `<option value="" disabled selected>pilih kamar</option>`
         res.Data.forEach(room => {
 
@@ -184,14 +184,14 @@ $.ajax({
                 return
             }
 
-        
+
             $.ajax({
                 url: `https://localhost:7095/api/RoomPrice/${room.RoomPriceId}`,
                 type: 'GET',
                 async: false,
                 success: function (res) {
 
-            
+
 
                     temp += `<option data-room-price-id="${room.RoomPriceId}" value="${room.Id}">Kamar no ${room.Id} (Tipe Kamar ${res.Data.RoomType})</option>`
 
@@ -206,7 +206,7 @@ $.ajax({
 
         })
 
-        console.log(temp)
+    
 
         document.getElementById('selectedRoom').innerHTML = temp
 
@@ -253,54 +253,100 @@ function sendNewTransaction(event) {
 
     const formElement = event.target
 
-    console.log(formElement.checkValidity())
-    console.log(formElement.reportValidity())
 
     if (!formElement.checkValidity()) {
         event.stopPropagation()
         formElement.classList.add('was-validated')
         return
     }
-   
-
-    const formEl = document.querySelector('#transactionForm');
-    const formData = new FormData(formEl);
 
 
-    const outDateValue = new Date(document.querySelector('#outDate').value)
-    const amountValue = +document.querySelector('#totalAmount').value
+    //const formEl = document.querySelector('#transactionForm');
+    const formData = new FormData();
 
-    const proofPaymentFileName = document.querySelector('#proofPayment').files[0].name 
 
-    const data = {
-        Email: formData.get('Email'),
-        Password: formData.get('Password'),
-        NIK: formData.get('NIK'),
-        Name: formData.get('Name').toLowerCase(),
-        Gender: formData.get('Gender').toLowerCase(),
-        Contact: formData.get('Contact'),
-        City: formData.get('City').toLowerCase(),
-        Religion: formData.get('Religion').toLowerCase(),
-        BirthDate: formData.get('BirthDate'),
-        ProofPayment: proofPaymentFileName,
-        PaymentDate: formData.get('PaymentDate'),
-        EntryDate: formData.get('EntryDate'),
-        OutDate: outDateValue,
-        Amount: amountValue,
-        RoomId: formData.get('RoomId'),
 
+
+    const NIKValue = document.querySelector('#occupantNIK').value
+    const nameValue = document.querySelector('#occupantName').value
+
+    let genderValue = null
+
+    let radios = document.getElementsByName('Gender').values()
+    for (let input of radios) {
+        if (input.checked) {
+            genderValue = input.value
+        }
     }
+
+    const contactValue = document.querySelector('#occupantContact').value
+    const cityValue = document.querySelector('#occupantCity').value
+    const religionValue = document.querySelector('#occupantReligion').value
+    const birthDateValue = document.querySelector('#occupantBirthDate').value
+    const emailValue = document.querySelector('#userEmail').value
+    const passwordValue = document.querySelector('#userPassword').value
+    const roomValue = document.querySelector('#selectedRoom').value
+    const entryDateValue = document.querySelector('#entryDate').value
+
+    const outDateValue = document.querySelector('#outDate').value
+    const amountValue = +document.querySelector('#totalAmount').value
+    const paymentDateValue = document.querySelector('#paymentDate').value
+    const imageFile = document.querySelector('#Image').files[0]
+
+
+    formData.append('NIK', NIKValue)
+    formData.append('Name', nameValue)
+    formData.append('Gender', genderValue)
+    formData.append('Contact', contactValue)
+    formData.append('City', cityValue)
+    formData.append('Religion', religionValue)
+    formData.append('BirthDate', birthDateValue)
+    formData.append('Email', emailValue)
+    formData.append('Password', passwordValue)
+    formData.append('RoomId', roomValue)
+    formData.append('EntryDate', entryDateValue)
+    formData.append('PaymentDate', paymentDateValue)
+    formData.append('Amount', amountValue);
+    formData.append('OutDate', outDateValue);
+    formData.append('Image', imageFile);
+
+
+    for (let a of formData.values()) {
+        console.log(a)
+    }
+
+    //const data = {
+    //    Email: formData.get('Email'),
+    //    Password: formData.get('Password'),
+    //    NIK: formData.get('NIK'),
+    //    Name: formData.get('Name').toLowerCase(),
+    //    Gender: formData.get('Gender').toLowerCase(),
+    //    Contact: formData.get('Contact'),
+    //    City: formData.get('City').toLowerCase(),
+    //    Religion: formData.get('Religion').toLowerCase(),
+    //    BirthDate: formData.get('BirthDate'),
+    //    ProofPayment: proofPaymentFileName,
+    //    PaymentDate: formData.get('PaymentDate'),
+    //    EntryDate: formData.get('EntryDate'),
+    //    OutDate: outDateValue,
+    //    Amount: amountValue,
+    //    RoomId: formData.get('RoomId'),
+
+    //}
 
 
     $.ajax({
         url: 'https://localhost:7095/api/Transaction/NewTransaction',
         type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(data),
+        processData: false,
+        contentType: false,
+        data: formData,
         success: function (res) {
             console.log(res);
-            window.location.reload()
+            //window.location.reload()
+        },
+        error: function (err) {
+            console.log(err)
         }
     })
 }
@@ -342,7 +388,7 @@ function approvePayment(paymentId) {
         }
     })
 
-    
+
 }
 
 //admin reject payment status masih on hold

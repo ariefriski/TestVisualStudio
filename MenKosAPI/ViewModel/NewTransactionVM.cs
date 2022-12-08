@@ -15,7 +15,8 @@ namespace MenKosAPI.ViewModel
         public string Religion { get; set; }
         public DateTime BirthDate { get; set; }
 
-        public string ProofPayment { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ProofPayment { get; set; }
 
         public DateTime PaymentDate { get; set; }
 

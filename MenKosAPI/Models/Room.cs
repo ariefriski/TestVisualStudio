@@ -1,5 +1,6 @@
 ﻿
 
+using MenKosAPI.Context;
 using System.Text.Json.Serialization;
 
 namespace MenKosAPI.Models
@@ -9,7 +10,7 @@ namespace MenKosAPI.Models
         public int Id { get; set; }
         public int Floor { get; set; }
 
-        
+
 
         public bool Status { get; set; }
 
@@ -17,10 +18,13 @@ namespace MenKosAPI.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? RoomPriceId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public RoomPrice? RoomPrice{ get; set; }
+        public RoomPrice? RoomPrice { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? PaymentId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+     
+        
         public Payment? Payment { get; set; }
     }
 }

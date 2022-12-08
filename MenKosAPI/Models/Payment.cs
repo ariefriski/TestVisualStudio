@@ -10,8 +10,8 @@ namespace MenKosAPI.Models
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
 
-     
         public bool Status { get; set; }
+
         public string ProofPayment { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? OrderId { get; set; }

@@ -1,8 +1,10 @@
 ﻿using MenKosAPI.Base;
 using MenKosAPI.Models;
 using MenKosAPI.Repositories.Data;
+using MenKosAPI.Responses;
 using MenKosAPI.ViewModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MenKosAPI.Controllers
@@ -12,11 +14,13 @@ namespace MenKosAPI.Controllers
     public class TransactionController : ControllerBase
     {
         private TransactionRepository _transactionRepository;
+        private readonly ILogger<TransactionController> logger;
 
-        public TransactionController(TransactionRepository transactionRepository)
+        public TransactionController(TransactionRepository transactionRepository, ILogger<TransactionController> logger)
         {
 
             _transactionRepository = transactionRepository;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -34,23 +38,77 @@ namespace MenKosAPI.Controllers
 
 
         [HttpPost("NewTransaction")]
-        public IActionResult CreateTransaction(NewTransactionVM newTransaction)
+        public async Task<IActionResult> CreateTransaction([FromForm]NewTransactionVM newTransaction)
         {
-            var result = _transactionRepository.CreateNewTransaction(newTransaction);
+            //var result = _transactionRepository.CreateNewTransaction(newTransaction);
 
-            return result switch
+            if (newTransaction == null)
+
+
             {
-                1 => Ok(new
-                {
-                    Message = "Buat Transaksi Baru Berhasil!",
-                    StatusCode = 200,
-                }),
-                _ => BadRequest(new
-                {
-                    Message = "Buat Transaksi Gagal!",
-                    StatusCode = 400
-                })
-            };
+
+
+                return BadRequest(new PostResponse { Success = false, ErrorCode = "S01", Error = "Invalid post request" });
+
+
+            }
+
+
+            if (string.IsNullOrEmpty(Request.GetMultipartBoundary()))
+
+
+            {
+
+
+                return BadRequest(new PostResponse { Success = false, ErrorCode = "S02", Error = "Invalid post header" });
+
+
+            }
+
+
+            if (newTransaction.Image != null)
+
+
+            {
+
+
+                await _transactionRepository.SavePayment(newTransaction);
+
+
+            }
+
+
+            var postResponse = await _transactionRepository.CreateNewTransaction(newTransaction);
+
+
+            if (!postResponse.Success)
+
+
+            {
+
+
+                return NotFound(postResponse);
+
+
+            }
+
+
+            return Ok(postResponse.Post);
+
+
+            //return result switch
+            //{
+            //    1 => Ok(new
+            //    {
+            //        Message = "Buat Transaksi Baru Berhasil!",
+            //        StatusCode = 200,
+            //    }),
+            //    _ => BadRequest(new
+            //    {
+            //        Message = "Buat Transaksi Gagal!",
+            //        StatusCode = 400
+            //    })
+            //};
 
 
 
